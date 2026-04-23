@@ -1,0 +1,16 @@
+__pycache__/
+*.py[cod]
+*.egg-info/
+dist/
+build/
+.env
+.venv/
+venv/
+chroma_db/
+models/lora_adapter/
+data/generated/*
+learnforge.db
+.DS_Store
+.idea/
+.vscode/
+.ipynb_checkpoints/
