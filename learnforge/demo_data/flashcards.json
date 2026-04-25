@@ -1,0 +1,91 @@
+{
+  "sets": [
+    {
+      "module_id": "m1",
+      "cards": [
+        {
+          "id": "fc1",
+          "front": "What are the three main types of Machine Learning?",
+          "back": "Supervised Learning (labeled data), Unsupervised Learning (no labels), Reinforcement Learning (rewards/penalties)",
+          "hint": "Think about what kind of feedback the model gets during training",
+          "difficulty": "easy"
+        },
+        {
+          "id": "fc2",
+          "front": "What is the difference between classification and regression?",
+          "back": "Classification predicts discrete categories (spam/not spam). Regression predicts continuous values (house price).",
+          "hint": "One is about labels, the other about numbers",
+          "difficulty": "easy"
+        },
+        {
+          "id": "fc3",
+          "front": "Name the 8 stages of the ML pipeline",
+          "back": "1. Data Collection \u2192 2. Preprocessing \u2192 3. Feature Engineering \u2192 4. Model Selection \u2192 5. Training \u2192 6. Evaluation \u2192 7. Deployment \u2192 8. Monitoring",
+          "hint": "Starts with data, ends with keeping watch",
+          "difficulty": "medium"
+        },
+        {
+          "id": "fc4",
+          "front": "What is overfitting?",
+          "back": "When a model memorizes the training data (including noise) and performs poorly on new, unseen data. High training accuracy but low test accuracy.",
+          "hint": "The model is too good at the training set",
+          "difficulty": "easy"
+        },
+        {
+          "id": "fc5",
+          "front": "When should you use unsupervised learning?",
+          "back": "When you don't have labeled data and want to discover hidden patterns \u2014 customer segmentation, anomaly detection, dimensionality reduction.",
+          "hint": "No teacher, no labels, just finding structure",
+          "difficulty": "medium"
+        },
+        {
+          "id": "fc6",
+          "front": "What is the bias-variance tradeoff?",
+          "back": "High bias = underfitting (too simple). High variance = overfitting (too complex). The goal is to find the sweet spot that minimizes total error.",
+          "hint": "Simple vs complex models",
+          "difficulty": "hard"
+        },
+        {
+          "id": "fc7",
+          "front": "What is gradient descent?",
+          "back": "An optimization algorithm that iteratively adjusts model parameters in the direction that reduces the loss function. Learning rate controls step size.",
+          "hint": "Going downhill to find the lowest point",
+          "difficulty": "medium"
+        },
+        {
+          "id": "fc8",
+          "front": "What is cross-validation?",
+          "back": "A technique that splits data into k folds, trains on k-1 folds and tests on the remaining fold, rotating k times. Gives a more reliable estimate of model performance.",
+          "hint": "k-fold \u2014 everyone gets a turn being the test set",
+          "difficulty": "medium"
+        }
+      ]
+    },
+    {
+      "module_id": "m2",
+      "cards": [
+        {
+          "id": "fc9",
+          "front": "When is linear regression appropriate?",
+          "back": "When the relationship between features and target is approximately linear, the target is continuous, and you need interpretability.",
+          "hint": "Straight line through the data",
+          "difficulty": "easy"
+        },
+        {
+          "id": "fc10",
+          "front": "What is a Random Forest?",
+          "back": "An ensemble of decision trees, each trained on a random subset of data and features. Final prediction is the average (regression) or majority vote (classification).",
+          "hint": "Many trees make a forest",
+          "difficulty": "easy"
+        },
+        {
+          "id": "fc11",
+          "front": "What is the 'No Free Lunch' theorem?",
+          "back": "No single algorithm is best for all problems. Algorithm choice depends on data characteristics, problem type, and requirements.",
+          "hint": "There's no universal winner",
+          "difficulty": "hard"
+        }
+      ]
+    }
+  ]
+}

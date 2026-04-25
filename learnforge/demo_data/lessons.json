@@ -1,0 +1,104 @@
+{
+  "lessons": [
+    {
+      "module_id": "m1",
+      "title": "Foundations of Machine Learning",
+      "sections": [
+        {
+          "heading": "What is Machine Learning?",
+          "content": "Machine Learning is a subset of artificial intelligence where systems learn patterns from data rather than being explicitly programmed. Instead of writing rules like 'if temperature > 100 then alarm', an ML system learns these thresholds from historical data.\n\nThink of it like teaching a child to recognize cats. You don't give them a rulebook \u2014 you show them thousands of pictures until they figure out the pattern themselves. That's essentially what ML does with data.",
+          "key_concepts": [
+            "Learning from data",
+            "Pattern recognition",
+            "Generalization"
+          ],
+          "examples": [
+            "Email spam filter learns from labeled spam/not-spam emails",
+            "Netflix recommendation engine learns from viewing history"
+          ]
+        },
+        {
+          "heading": "Types of Machine Learning",
+          "content": "There are three main paradigms:\n\n**Supervised Learning**: You have labeled data (input-output pairs). The model learns to map inputs to outputs. Examples: spam detection, house price prediction, image classification.\n\n**Unsupervised Learning**: No labels. The model finds hidden structure. Examples: customer segmentation, anomaly detection, topic modeling.\n\n**Reinforcement Learning**: An agent learns by interacting with an environment and receiving rewards/penalties. Examples: game AI, robotics, autonomous vehicles.",
+          "key_concepts": [
+            "Supervised learning",
+            "Unsupervised learning",
+            "Reinforcement learning"
+          ],
+          "examples": [
+            "Supervised: predict if an email is spam given features",
+            "Unsupervised: cluster customers by purchasing behavior",
+            "RL: train a robot to walk"
+          ]
+        },
+        {
+          "heading": "The ML Pipeline",
+          "content": "Every ML project follows roughly the same pipeline:\n\n1. **Data Collection** \u2014 Gather relevant data from databases, APIs, web scraping\n2. **Data Preprocessing** \u2014 Clean, handle missing values, normalize\n3. **Feature Engineering** \u2014 Create meaningful input features\n4. **Model Selection** \u2014 Choose an algorithm appropriate for the problem\n5. **Training** \u2014 Fit the model on training data\n6. **Evaluation** \u2014 Test on held-out data using appropriate metrics\n7. **Deployment** \u2014 Serve the model in production\n8. **Monitoring** \u2014 Track performance and retrain as needed",
+          "key_concepts": [
+            "Data pipeline",
+            "Feature engineering",
+            "Model lifecycle"
+          ],
+          "examples": [
+            "Training a sentiment analysis model: collect tweets \u2192 clean text \u2192 vectorize \u2192 train classifier \u2192 evaluate accuracy \u2192 deploy as API"
+          ]
+        }
+      ],
+      "summary": "Machine Learning enables systems to learn from data. The three main types \u2014 supervised, unsupervised, and reinforcement learning \u2014 each solve different kinds of problems. Every ML project follows a pipeline from data collection through deployment and monitoring.",
+      "key_takeaways": [
+        "ML learns patterns from data instead of explicit programming",
+        "Choose supervised/unsupervised/RL based on whether you have labels",
+        "The ML pipeline has 8 stages from data to monitoring"
+      ]
+    },
+    {
+      "module_id": "m2",
+      "title": "Supervised Learning Algorithms",
+      "sections": [
+        {
+          "heading": "Linear Regression",
+          "content": "Linear regression fits a straight line (or hyperplane) to predict continuous values. The model learns weights that minimize the mean squared error between predictions and actual values.\n\ny = w\u2081x\u2081 + w\u2082x\u2082 + ... + b\n\nIt's simple, interpretable, and works well when the relationship between features and target is roughly linear.",
+          "key_concepts": [
+            "Linear model",
+            "Mean squared error",
+            "Gradient descent"
+          ],
+          "examples": [
+            "Predicting house prices from square footage, bedrooms, location"
+          ]
+        },
+        {
+          "heading": "Decision Trees & Random Forests",
+          "content": "Decision trees split data by asking yes/no questions about features. They're intuitive and handle non-linear relationships, but overfit easily.\n\nRandom Forests solve overfitting by training many trees on random subsets of data and averaging predictions (ensemble method). They're one of the most reliable out-of-the-box algorithms.",
+          "key_concepts": [
+            "Information gain",
+            "Ensemble learning",
+            "Bagging"
+          ],
+          "examples": [
+            "Diagnosing diseases from symptoms \u2014 each branch is a question like 'fever > 101?'"
+          ]
+        },
+        {
+          "heading": "Choosing the Right Algorithm",
+          "content": "No single algorithm wins everywhere. Consider:\n\n- **Data size**: Small data \u2192 simpler models (logistic regression). Big data \u2192 complex models (neural nets).\n- **Interpretability**: Need to explain decisions? \u2192 Decision trees, linear models. Black box OK? \u2192 Neural nets, ensembles.\n- **Feature types**: All numerical \u2192 most algorithms work. Categorical \u2192 trees handle them naturally.\n- **Speed**: Need real-time prediction? \u2192 Logistic regression, small trees. Batch OK? \u2192 Anything goes.",
+          "key_concepts": [
+            "Algorithm selection",
+            "Bias-variance tradeoff",
+            "No free lunch theorem"
+          ],
+          "examples": [
+            "Credit scoring: use logistic regression for interpretability",
+            "Image classification: use CNNs for accuracy"
+          ]
+        }
+      ],
+      "summary": "Supervised learning algorithms range from simple linear models to complex ensembles. The choice depends on data size, interpretability needs, and the nature of the problem.",
+      "key_takeaways": [
+        "Linear regression for continuous targets with linear relationships",
+        "Random forests are robust and handle non-linearity",
+        "Algorithm choice depends on data size, interpretability, and feature types"
+      ]
+    }
+  ]
+}

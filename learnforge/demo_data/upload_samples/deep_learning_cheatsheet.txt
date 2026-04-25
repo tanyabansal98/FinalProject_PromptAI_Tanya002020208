@@ -1,0 +1,56 @@
+DEEP LEARNING CHEAT SHEET
+=========================
+
+NEURAL NETWORK BASICS
+- Neuron: receives inputs, applies weights + bias, passes through activation function
+- Layer types: Input, Hidden, Output
+- Forward pass: data flows input → hidden → output
+- Backward pass (backpropagation): gradients flow output → hidden → input
+
+ACTIVATION FUNCTIONS
+- ReLU: f(x) = max(0, x) — most common for hidden layers, dies at negative values
+- Sigmoid: f(x) = 1/(1+e^-x) — outputs 0-1, used for binary classification
+- Tanh: f(x) = (e^x - e^-x)/(e^x + e^-x) — outputs -1 to 1
+- Softmax: converts logits to probabilities that sum to 1, used for multi-class output
+
+LOSS FUNCTIONS
+- MSE (Mean Squared Error): for regression — (1/n) * sum((y - y_hat)^2)
+- Cross-Entropy: for classification — -sum(y * log(y_hat))
+- Binary Cross-Entropy: for binary classification
+
+OPTIMIZERS
+- SGD: basic gradient descent, can be slow
+- Adam: adaptive learning rate, most popular default choice
+- RMSprop: good for RNNs
+
+REGULARIZATION TECHNIQUES
+- Dropout: randomly zero out neurons during training (typically 0.2-0.5)
+- L1 regularization: adds |weights| penalty, promotes sparsity
+- L2 regularization: adds weights^2 penalty, prevents large weights
+- Batch normalization: normalizes layer inputs, stabilizes training
+- Early stopping: stop training when validation loss stops improving
+
+COMMON ARCHITECTURES
+- MLP (Multi-Layer Perceptron): basic feedforward, good for tabular data
+- CNN (Convolutional Neural Network): image processing, spatial data
+  - Conv2D → ReLU → MaxPool → Conv2D → ReLU → MaxPool → Flatten → Dense
+- RNN (Recurrent Neural Network): sequential data, text
+  - Problem: vanishing gradients on long sequences
+- LSTM (Long Short-Term Memory): solves vanishing gradient with gates
+- Transformer: attention mechanism, parallelizable, state-of-the-art for NLP
+  - Self-attention: each token attends to all other tokens
+  - Multi-head attention: multiple attention patterns in parallel
+
+HYPERPARAMETERS TO TUNE
+- Learning rate: start with 0.001, use scheduler
+- Batch size: 32 or 64 typical, larger = more stable but needs more memory
+- Number of layers/neurons: start small, increase if underfitting
+- Dropout rate: 0.2-0.5
+- Number of epochs: use early stopping
+
+COMMON MISTAKES
+- Not normalizing input data (scale to 0-1 or standardize)
+- Learning rate too high (loss explodes) or too low (training too slow)
+- Not shuffling training data
+- Data leakage: test data info leaking into training
+- Not using GPU when available

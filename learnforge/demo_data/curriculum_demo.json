@@ -1,0 +1,81 @@
+{
+  "topic": "Machine Learning",
+  "level": "intermediate",
+  "description": "A comprehensive intermediate course on Machine Learning covering supervised learning, neural networks, model evaluation, and real-world applications.",
+  "total_estimated_hours": 3.5,
+  "modules": [
+    {
+      "id": "m1",
+      "title": "Foundations of Machine Learning",
+      "description": "What ML is, types of learning, the ML pipeline from data to deployment.",
+      "objectives": [
+        "Define machine learning and its types",
+        "Understand the ML pipeline stages"
+      ],
+      "prerequisites": [],
+      "bloom_level": "remember",
+      "estimated_minutes": 25,
+      "difficulty": "easy"
+    },
+    {
+      "id": "m2",
+      "title": "Supervised Learning Algorithms",
+      "description": "Linear regression, logistic regression, decision trees, SVMs \u2014 when to use what.",
+      "objectives": [
+        "Compare supervised learning algorithms",
+        "Choose the right algorithm for a problem"
+      ],
+      "prerequisites": [
+        "m1"
+      ],
+      "bloom_level": "understand",
+      "estimated_minutes": 35,
+      "difficulty": "medium"
+    },
+    {
+      "id": "m3",
+      "title": "Neural Networks & Deep Learning",
+      "description": "Perceptrons, backpropagation, CNNs, RNNs \u2014 building blocks of modern AI.",
+      "objectives": [
+        "Explain how neural networks learn",
+        "Design a simple neural network architecture"
+      ],
+      "prerequisites": [
+        "m2"
+      ],
+      "bloom_level": "apply",
+      "estimated_minutes": 40,
+      "difficulty": "medium"
+    },
+    {
+      "id": "m4",
+      "title": "Model Evaluation & Tuning",
+      "description": "Cross-validation, bias-variance tradeoff, hyperparameter tuning, avoiding overfitting.",
+      "objectives": [
+        "Evaluate model performance with appropriate metrics",
+        "Diagnose overfitting vs underfitting"
+      ],
+      "prerequisites": [
+        "m3"
+      ],
+      "bloom_level": "analyze",
+      "estimated_minutes": 35,
+      "difficulty": "hard"
+    },
+    {
+      "id": "m5",
+      "title": "ML in Production",
+      "description": "Feature engineering, MLOps, model monitoring, ethical considerations.",
+      "objectives": [
+        "Design a production ML pipeline",
+        "Identify ethical risks in ML systems"
+      ],
+      "prerequisites": [
+        "m4"
+      ],
+      "bloom_level": "evaluate",
+      "estimated_minutes": 30,
+      "difficulty": "hard"
+    }
+  ]
+}

@@ -1,0 +1,127 @@
+{
+  "quizzes": [
+    {
+      "module_id": "m1",
+      "questions": [
+        {
+          "id": "q1",
+          "question": "Which type of ML requires labeled training data?",
+          "type": "multiple_choice",
+          "options": [
+            "Supervised Learning",
+            "Unsupervised Learning",
+            "Reinforcement Learning",
+            "Transfer Learning"
+          ],
+          "correct_answer": "Supervised Learning",
+          "explanation": "Supervised learning uses input-output pairs (labeled data) to learn a mapping function. Unsupervised learning has no labels, and RL learns from rewards.",
+          "bloom_level": "remember",
+          "difficulty": "easy"
+        },
+        {
+          "id": "q2",
+          "question": "A system that groups customers into segments without predefined categories is using:",
+          "type": "multiple_choice",
+          "options": [
+            "Supervised classification",
+            "Unsupervised clustering",
+            "Reinforcement learning",
+            "Regression"
+          ],
+          "correct_answer": "Unsupervised clustering",
+          "explanation": "Clustering is an unsupervised technique that finds natural groupings in data without predefined labels.",
+          "bloom_level": "understand",
+          "difficulty": "easy"
+        },
+        {
+          "id": "q3",
+          "question": "True or False: The ML pipeline ends after model training.",
+          "type": "true_false",
+          "options": [
+            "True",
+            "False"
+          ],
+          "correct_answer": "False",
+          "explanation": "The pipeline continues with evaluation, deployment, and ongoing monitoring. Models can degrade over time and need retraining.",
+          "bloom_level": "understand",
+          "difficulty": "easy"
+        },
+        {
+          "id": "q4",
+          "question": "A self-driving car that learns to navigate by receiving rewards for staying on the road uses:",
+          "type": "multiple_choice",
+          "options": [
+            "Supervised Learning",
+            "Unsupervised Learning",
+            "Reinforcement Learning",
+            "Semi-supervised Learning"
+          ],
+          "correct_answer": "Reinforcement Learning",
+          "explanation": "RL agents learn by interacting with an environment and receiving rewards/penalties. Driving is a sequential decision-making problem ideal for RL.",
+          "bloom_level": "apply",
+          "difficulty": "medium"
+        },
+        {
+          "id": "q5",
+          "question": "Why is feature engineering important in the ML pipeline?",
+          "type": "short_answer",
+          "options": null,
+          "correct_answer": "Feature engineering creates meaningful input representations that help models learn better patterns, directly impacting model performance.",
+          "explanation": "Good features capture the signal in your data. Raw data often needs transformation \u2014 extracting day-of-week from timestamps, combining features, or encoding categorical variables.",
+          "bloom_level": "analyze",
+          "difficulty": "medium"
+        }
+      ]
+    },
+    {
+      "module_id": "m2",
+      "questions": [
+        {
+          "id": "q6",
+          "question": "Linear regression minimizes which loss function?",
+          "type": "multiple_choice",
+          "options": [
+            "Cross-entropy loss",
+            "Mean Squared Error",
+            "Hinge loss",
+            "Log loss"
+          ],
+          "correct_answer": "Mean Squared Error",
+          "explanation": "Linear regression minimizes MSE = (1/n)\u03a3(y - \u0177)\u00b2, the average squared difference between predictions and actual values.",
+          "bloom_level": "remember",
+          "difficulty": "easy"
+        },
+        {
+          "id": "q7",
+          "question": "What problem do Random Forests solve that single decision trees have?",
+          "type": "multiple_choice",
+          "options": [
+            "Underfitting",
+            "Overfitting",
+            "Slow training",
+            "Missing data"
+          ],
+          "correct_answer": "Overfitting",
+          "explanation": "Single decision trees tend to memorize training data (overfit). Random Forests reduce overfitting by averaging predictions from many trees trained on random subsets.",
+          "bloom_level": "understand",
+          "difficulty": "medium"
+        },
+        {
+          "id": "q8",
+          "question": "For a medical diagnosis system where doctors need to understand WHY a prediction was made, which algorithm is most appropriate?",
+          "type": "multiple_choice",
+          "options": [
+            "Deep neural network",
+            "Random Forest with 1000 trees",
+            "Logistic regression",
+            "Support Vector Machine with RBF kernel"
+          ],
+          "correct_answer": "Logistic regression",
+          "explanation": "Logistic regression provides interpretable coefficients showing how each feature contributes to the prediction. Medical contexts require explainability.",
+          "bloom_level": "evaluate",
+          "difficulty": "hard"
+        }
+      ]
+    }
+  ]
+}
