@@ -1,0 +1,923 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LearnForge — AI-Powered Personalized Learning</title>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --flame-1: #FF6B35;
+  --flame-2: #F7C948;
+  --deep: #0D1117;
+  --surface: #161B22;
+  --card: #1C2129;
+  --border: #30363D;
+  --text-1: #F0F6FC;
+  --text-2: #8B949E;
+  --text-3: #6E7681;
+  --accent: #FF6B35;
+  --accent-glow: rgba(255, 107, 53, 0.15);
+  --teal: #3FB9A0;
+  --purple: #A78BFA;
+  --blue: #58A6FF;
+  --coral: #F78166;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--deep);
+  color: var(--text-1);
+  overflow-x: hidden;
+}
+
+.grain {
+  position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+  pointer-events: none; z-index: 9999;
+}
+
+/* Navigation */
+nav {
+  position: fixed; top: 0; width: 100%; z-index: 100;
+  background: rgba(13, 17, 23, 0.85); backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border);
+  padding: 0 2rem;
+}
+nav .inner {
+  max-width: 1200px; margin: 0 auto;
+  display: flex; align-items: center; justify-content: space-between;
+  height: 64px;
+}
+nav .logo {
+  font-family: 'Instrument Serif', serif;
+  font-size: 1.5rem; color: var(--accent);
+  display: flex; align-items: center; gap: 0.5rem;
+  text-decoration: none;
+}
+nav .links { display: flex; gap: 2rem; list-style: none; }
+nav .links a {
+  color: var(--text-2); text-decoration: none; font-size: 0.9rem;
+  font-weight: 500; transition: color 0.2s;
+}
+nav .links a:hover { color: var(--text-1); }
+nav .github-btn {
+  background: var(--accent); color: #fff; padding: 0.5rem 1.2rem;
+  border-radius: 8px; text-decoration: none; font-weight: 600; font-size: 0.85rem;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+nav .github-btn:hover { transform: translateY(-1px); box-shadow: 0 4px 20px var(--accent-glow); }
+
+/* Hero */
+.hero {
+  min-height: 100vh; display: flex; align-items: center; justify-content: center;
+  padding: 6rem 2rem 4rem; position: relative;
+}
+.hero::before {
+  content: ''; position: absolute; top: 0; left: 50%; transform: translateX(-50%);
+  width: 800px; height: 800px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(255,107,53,0.08) 0%, transparent 70%);
+  pointer-events: none;
+}
+.hero-content { text-align: center; max-width: 800px; position: relative; }
+.hero-badge {
+  display: inline-block; padding: 0.4rem 1rem; border-radius: 100px;
+  border: 1px solid var(--border); color: var(--text-2); font-size: 0.8rem;
+  margin-bottom: 2rem; font-weight: 500; letter-spacing: 0.02em;
+  animation: fadeUp 0.8s ease both;
+}
+.hero h1 {
+  font-family: 'Instrument Serif', serif; font-size: clamp(3rem, 7vw, 5.5rem);
+  line-height: 1.05; margin-bottom: 1.5rem; font-weight: 400;
+  animation: fadeUp 0.8s ease 0.1s both;
+}
+.hero h1 .accent { color: var(--accent); font-style: italic; }
+.hero p {
+  font-size: 1.2rem; color: var(--text-2); line-height: 1.7;
+  max-width: 600px; margin: 0 auto 2.5rem;
+  animation: fadeUp 0.8s ease 0.2s both;
+}
+.hero-cta {
+  display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;
+  animation: fadeUp 0.8s ease 0.3s both;
+}
+.btn-primary {
+  background: var(--accent); color: #fff; padding: 0.8rem 2rem;
+  border-radius: 10px; text-decoration: none; font-weight: 600;
+  font-size: 1rem; transition: all 0.2s; border: none; cursor: pointer;
+}
+.btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 30px var(--accent-glow); }
+.btn-secondary {
+  background: transparent; color: var(--text-1); padding: 0.8rem 2rem;
+  border-radius: 10px; text-decoration: none; font-weight: 600;
+  font-size: 1rem; border: 1px solid var(--border); transition: all 0.2s;
+}
+.btn-secondary:hover { border-color: var(--text-2); background: var(--surface); }
+
+/* Sections */
+section { padding: 6rem 2rem; max-width: 1200px; margin: 0 auto; }
+.section-label {
+  font-family: 'JetBrains Mono', monospace; font-size: 0.75rem;
+  color: var(--accent); text-transform: uppercase; letter-spacing: 0.15em;
+  margin-bottom: 1rem;
+}
+.section-title {
+  font-family: 'Instrument Serif', serif; font-size: clamp(2rem, 4vw, 3rem);
+  line-height: 1.15; margin-bottom: 1rem;
+}
+.section-desc { color: var(--text-2); font-size: 1.1rem; line-height: 1.7; max-width: 650px; margin-bottom: 3rem; }
+
+/* Feature grid */
+.features-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+}
+.feature-card {
+  background: var(--card); border: 1px solid var(--border); border-radius: 16px;
+  padding: 2rem; transition: all 0.3s; position: relative; overflow: hidden;
+}
+.feature-card:hover { border-color: var(--accent); transform: translateY(-4px); }
+.feature-card::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+  background: linear-gradient(90deg, var(--flame-1), var(--flame-2));
+  opacity: 0; transition: opacity 0.3s;
+}
+.feature-card:hover::before { opacity: 1; }
+.feature-icon {
+  width: 48px; height: 48px; border-radius: 12px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.5rem; margin-bottom: 1.2rem;
+}
+.feature-card h3 { font-size: 1.15rem; margin-bottom: 0.6rem; font-weight: 600; }
+.feature-card p { color: var(--text-2); font-size: 0.9rem; line-height: 1.6; }
+
+/* Rubric components */
+.rubric-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+}
+.rubric-card {
+  background: var(--surface); border: 1px solid var(--border); border-radius: 12px;
+  padding: 1.5rem; text-align: center; transition: all 0.3s;
+}
+.rubric-card:hover { border-color: var(--teal); }
+.rubric-num {
+  font-family: 'Instrument Serif', serif; font-size: 2.5rem;
+  color: var(--teal); line-height: 1;
+}
+.rubric-card h4 { font-size: 0.95rem; margin: 0.5rem 0 0.3rem; font-weight: 600; }
+.rubric-card p { color: var(--text-3); font-size: 0.8rem; line-height: 1.5; }
+
+/* Architecture */
+.arch-container {
+  background: var(--surface); border: 1px solid var(--border); border-radius: 16px;
+  padding: 2rem; margin-bottom: 2rem; overflow-x: auto;
+}
+.arch-container h3 {
+  font-family: 'JetBrains Mono', monospace; font-size: 0.8rem;
+  color: var(--accent); margin-bottom: 1.5rem; text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+/* Architecture SVG styles */
+.arch-svg text { font-family: 'DM Sans', sans-serif; }
+.arch-svg .node-fill { rx: 10; }
+.arch-svg .label { fill: #F0F6FC; font-size: 13px; font-weight: 600; }
+.arch-svg .sublabel { fill: #8B949E; font-size: 11px; }
+.arch-svg .arrow { stroke: #30363D; stroke-width: 1.5; fill: none; marker-end: url(#arrowhead); }
+.arch-svg .arrow-accent { stroke: #FF6B35; stroke-width: 1.5; fill: none; marker-end: url(#arrowhead-accent); }
+
+/* Interactive demo */
+.demo-container {
+  background: var(--card); border: 1px solid var(--border); border-radius: 16px;
+  overflow: hidden;
+}
+.demo-header {
+  padding: 1rem 1.5rem; border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; gap: 0.5rem;
+}
+.demo-dot { width: 12px; height: 12px; border-radius: 50%; }
+.demo-body { padding: 2rem; }
+.demo-input-row { display: flex; gap: 1rem; margin-bottom: 1.5rem; flex-wrap: wrap; }
+.demo-input {
+  flex: 1; min-width: 200px; padding: 0.8rem 1rem; border-radius: 10px;
+  border: 1px solid var(--border); background: var(--surface); color: var(--text-1);
+  font-family: 'DM Sans', sans-serif; font-size: 0.95rem; outline: none;
+  transition: border-color 0.2s;
+}
+.demo-input:focus { border-color: var(--accent); }
+.demo-select {
+  padding: 0.8rem 1rem; border-radius: 10px;
+  border: 1px solid var(--border); background: var(--surface); color: var(--text-1);
+  font-family: 'DM Sans', sans-serif; font-size: 0.95rem; outline: none; cursor: pointer;
+}
+.demo-output {
+  background: var(--surface); border-radius: 12px; padding: 1.5rem;
+  min-height: 200px; border: 1px solid var(--border);
+}
+.demo-output .module {
+  padding: 1rem; border-radius: 10px; border: 1px solid var(--border);
+  margin-bottom: 0.8rem; display: flex; align-items: center; gap: 1rem;
+  transition: all 0.3s; cursor: default;
+}
+.demo-output .module:hover { border-color: var(--accent); background: rgba(255,107,53,0.05); }
+.module-bloom {
+  width: 40px; height: 40px; border-radius: 10px; display: flex;
+  align-items: center; justify-content: center; font-size: 1.2rem; flex-shrink: 0;
+}
+.module-info h4 { font-size: 0.95rem; margin-bottom: 0.2rem; }
+.module-info p { font-size: 0.8rem; color: var(--text-3); }
+.module-tags { display: flex; gap: 0.4rem; margin-top: 0.3rem; }
+.tag {
+  font-size: 0.7rem; padding: 0.15rem 0.5rem; border-radius: 4px;
+  font-family: 'JetBrains Mono', monospace;
+}
+.tag-bloom { background: rgba(167,139,250,0.15); color: var(--purple); }
+.tag-time { background: rgba(63,185,160,0.15); color: var(--teal); }
+.tag-diff { background: rgba(247,129,102,0.15); color: var(--coral); }
+
+/* Tech stack */
+.stack-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem;
+}
+.stack-item {
+  display: flex; align-items: center; gap: 1rem; padding: 1rem;
+  background: var(--surface); border-radius: 10px; border: 1px solid var(--border);
+}
+.stack-item .dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+.stack-item strong { font-size: 0.9rem; }
+.stack-item span { color: var(--text-3); font-size: 0.8rem; }
+
+/* Author */
+.author-card {
+  background: var(--surface); border: 1px solid var(--border); border-radius: 16px;
+  padding: 2.5rem; display: flex; align-items: center; gap: 2rem; flex-wrap: wrap;
+}
+.author-avatar {
+  width: 100px; height: 100px; border-radius: 50%;
+  background: linear-gradient(135deg, var(--flame-1), var(--flame-2));
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Instrument Serif', serif; font-size: 2.5rem; color: #fff;
+  flex-shrink: 0;
+}
+.author-info h3 { font-size: 1.3rem; margin-bottom: 0.3rem; }
+.author-info .nuid { font-family: 'JetBrains Mono', monospace; color: var(--accent); font-size: 0.85rem; margin-bottom: 0.5rem; }
+.author-info p { color: var(--text-2); font-size: 0.95rem; line-height: 1.6; }
+.author-links { display: flex; gap: 1rem; margin-top: 1rem; }
+.author-links a {
+  color: var(--text-2); text-decoration: none; font-size: 0.85rem;
+  padding: 0.4rem 0.8rem; border: 1px solid var(--border); border-radius: 6px;
+  transition: all 0.2s;
+}
+.author-links a:hover { color: var(--text-1); border-color: var(--text-2); }
+
+/* Footer */
+footer {
+  text-align: center; padding: 3rem 2rem; border-top: 1px solid var(--border);
+  color: var(--text-3); font-size: 0.85rem;
+}
+
+/* Animations */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.reveal { opacity: 0; transform: translateY(30px); transition: all 0.6s ease; }
+.reveal.visible { opacity: 1; transform: translateY(0); }
+
+/* Mobile */
+@media (max-width: 768px) {
+  nav .links { display: none; }
+  .hero h1 { font-size: 2.5rem; }
+  .demo-input-row { flex-direction: column; }
+  .author-card { flex-direction: column; text-align: center; }
+  #about [style*="grid-template-columns"] { grid-template-columns: 1fr !important; }
+}
+</style>
+</head>
+<body>
+
+<div class="grain"></div>
+
+<nav>
+  <div class="inner">
+    <a href="#" class="logo">&#x1f525; LearnForge</a>
+    <ul class="links">
+      <li><a href="#about">About</a></li>
+      <li><a href="#features">Features</a></li>
+      <li><a href="#rubric">Components</a></li>
+      <li><a href="#architecture">Architecture</a></li>
+      <li><a href="#demo">Demo</a></li>
+      <li><a href="#flashcards-demo">Flashcards</a></li>
+      <li><a href="#docs">Documentation</a></li>
+    </ul>
+    <a href="https://github.com/tanyabansal98/FinalProject_PromptAI_Tanya002020208.git" target="_blank" class="github-btn">&#x2197; GitHub</a>
+  </div>
+</nav>
+
+<!-- Hero -->
+<div class="hero">
+  <div class="hero-content">
+    <div class="hero-badge">INFO 7375 &middot; Prof. Nick Bear Brown &middot; Spring 2026</div>
+    <h1>Learn anything with<br><span class="accent">AI-powered</span> precision</h1>
+    <p>LearnForge generates structured curricula, interactive quizzes, flashcards, and adaptive study plans for any topic — powered by three AI agents, RAG, and a fine-tuned LLM.</p>
+    <div class="hero-cta">
+      <a href="https://github.com/tanyabansal98/FinalProject_PromptAI_Tanya002020208.git" target="_blank" class="btn-primary">View on GitHub &#x2192;</a>
+      <a href="#demo" class="btn-secondary">Try the demo &#x2193;</a>
+    </div>
+  </div>
+</div>
+
+<!-- What is LearnForge -->
+<section id="about" style="padding-bottom:3rem;">
+  <div style="max-width:900px;margin:0 auto;">
+    <div class="section-label reveal">What is LearnForge?</div>
+    <h2 class="section-title reveal">AI that builds entire courses for you — in seconds</h2>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:2rem;margin-top:2rem;" class="reveal">
+      <div style="background:var(--card);border:1px solid var(--border);border-radius:16px;padding:2rem;">
+        <h3 style="font-size:1.1rem;margin-bottom:1rem;color:var(--flame-2);">The problem</h3>
+        <p style="color:var(--text-2);font-size:0.95rem;line-height:1.7;">Learning a new topic means hunting for tutorials, taking notes, quizzing yourself, and tracking what you don't know. There's no single tool that does all of this — personalized to your level, with real feedback, and for any topic.</p>
+      </div>
+      <div style="background:var(--card);border:1px solid var(--border);border-radius:16px;padding:2rem;">
+        <h3 style="font-size:1.1rem;margin-bottom:1rem;color:var(--teal);">The solution</h3>
+        <p style="color:var(--text-2);font-size:0.95rem;line-height:1.7;">Type a topic. Pick your level. LearnForge generates a structured curriculum, detailed lessons, quizzes with instant scoring, flashcards, and tracks your progress — all adapted to your demonstrated performance. Three AI agents work together to make it happen.</p>
+      </div>
+    </div>
+
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:2rem;margin-top:2rem;" class="reveal">
+      <h3 style="font-size:1.1rem;margin-bottom:1.2rem;">How simple is it?</h3>
+      <div style="display:flex;gap:2rem;flex-wrap:wrap;">
+        <div style="flex:1;min-width:200px;">
+          <div style="font-family:'JetBrains Mono',monospace;font-size:0.75rem;color:var(--accent);margin-bottom:0.5rem;">STEP 1</div>
+          <p style="color:var(--text-2);font-size:0.9rem;line-height:1.6;">Clone the repo, install dependencies, build the RAG index. Three commands.</p>
+          <code style="display:block;margin-top:0.5rem;padding:0.6rem;background:var(--deep);border-radius:6px;font-size:0.8rem;color:var(--text-2);font-family:'JetBrains Mono',monospace;">pip install -e . && make index && make demo</code>
+        </div>
+        <div style="flex:1;min-width:200px;">
+          <div style="font-family:'JetBrains Mono',monospace;font-size:0.75rem;color:var(--accent);margin-bottom:0.5rem;">STEP 2</div>
+          <p style="color:var(--text-2);font-size:0.9rem;line-height:1.6;">Open the app, type any topic, and start learning. Demo mode works instantly with zero API keys.</p>
+        </div>
+        <div style="flex:1;min-width:200px;">
+          <div style="font-family:'JetBrains Mono',monospace;font-size:0.75rem;color:var(--accent);margin-bottom:0.5rem;">STEP 3</div>
+          <p style="color:var(--text-2);font-size:0.9rem;line-height:1.6;">Switch to API mode for real-time generation, upload your own study materials, or use Ollama for fully offline learning.</p>
+        </div>
+      </div>
+    </div>
+
+    <div style="background:linear-gradient(135deg, rgba(255,107,53,0.08), rgba(247,201,72,0.08));border:1px solid rgba(255,107,53,0.2);border-radius:16px;padding:2rem;margin-top:2rem;text-align:center;" class="reveal">
+      <h3 style="font-size:1.2rem;margin-bottom:0.5rem;">Try it yourself</h3>
+      <p style="color:var(--text-2);font-size:0.95rem;margin-bottom:1.2rem;">Scroll down to the interactive demo to generate a curriculum, or clone the repo and run the full app locally.</p>
+      <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;">
+        <a href="#demo" class="btn-primary">Interactive demo &#x2193;</a>
+        <a href="https://github.com/tanyabansal98/FinalProject_PromptAI_Tanya002020208.git" target="_blank" class="btn-secondary">Clone from GitHub &#x2197;</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Features -->
+<section id="features">
+  <div class="section-label reveal">Features</div>
+  <h2 class="section-title reveal">Everything a learner needs,<br>generated by AI</h2>
+  <p class="section-desc reveal">Enter any topic. Pick your level. LearnForge builds a complete personalized learning experience.</p>
+
+  <div class="features-grid">
+    <div class="feature-card reveal">
+      <div class="feature-icon" style="background:rgba(167,139,250,0.12)">&#x1f4da;</div>
+      <h3>Structured curricula</h3>
+      <p>Modules with Bloom's Taxonomy progression — from recall to synthesis. Visual progression chart shows cognitive complexity escalating across modules.</p>
+    </div>
+    <div class="feature-card reveal">
+      <div class="feature-icon" style="background:rgba(255,107,53,0.12)">&#x1f9ea;</div>
+      <h3>Interactive quizzes</h3>
+      <p>MCQ, true/false, and short answer. Each question tagged with Bloom's level. Instant scoring with misconception detection and RAG-grounded feedback.</p>
+    </div>
+    <div class="feature-card reveal">
+      <div class="feature-icon" style="background:rgba(63,185,160,0.12)">&#x1f0cf;</div>
+      <h3>Spaced-repetition flashcards</h3>
+      <p>Flip cards with hints, confidence rating, and mastery tracking. Optimized for long-term retention.</p>
+    </div>
+    <div class="feature-card reveal">
+      <div class="feature-icon" style="background:rgba(88,166,255,0.12)">&#x1f4ca;</div>
+      <h3>Progress dashboard</h3>
+      <p>Bloom's radar chart, score trends, knowledge gap heatmap, and study streaks. All powered by Plotly visualizations.</p>
+    </div>
+    <div class="feature-card reveal">
+      <div class="feature-icon" style="background:rgba(247,201,72,0.12)">&#x1f3a8;</div>
+      <h3>Multimodal content</h3>
+      <p>Auto-generated concept diagrams (DALL-E / SVG) and text-to-speech audio narration on every lesson. Two modalities beyond text.</p>
+    </div>
+    <div class="feature-card reveal">
+      <div class="feature-icon" style="background:rgba(247,129,102,0.12)">&#x1f4c1;</div>
+      <h3>Upload your own materials</h3>
+      <p>Drag PDFs, TXT, or markdown files into the Data Manager. They get ingested into the RAG corpus so the assessor can cite your notes.</p>
+    </div>
+  </div>
+</section>
+
+<!-- Rubric Components -->
+<section id="rubric">
+  <div class="section-label reveal">Core components</div>
+  <h2 class="section-title reveal">5 generative AI components implemented</h2>
+  <p class="section-desc reveal">LearnForge implements 5 core generative AI techniques in a single cohesive system.</p>
+
+  <div class="rubric-grid">
+    <div class="rubric-card reveal">
+      <div class="rubric-num">01</div>
+      <h4>Prompt engineering</h4>
+      <p>5 system prompts with JSON schemas, Bloom's constraints, citation requirements</p>
+    </div>
+    <div class="rubric-card reveal">
+      <div class="rubric-num">02</div>
+      <h4>Fine-tuning</h4>
+      <p>QLoRA on Qwen2.5-3B, 180 examples, eval loss 0.609 &rarr; 0.234</p>
+    </div>
+    <div class="rubric-card reveal">
+      <div class="rubric-num">03</div>
+      <h4>RAG</h4>
+      <p>30-doc corpus, ChromaDB + BM25 hybrid, cross-encoder reranking</p>
+    </div>
+    <div class="rubric-card reveal">
+      <div class="rubric-num">04</div>
+      <h4>Multimodal</h4>
+      <p>DALL-E image gen + OpenAI TTS audio narration on lessons</p>
+    </div>
+    <div class="rubric-card reveal">
+      <div class="rubric-num">05</div>
+      <h4>Synthetic data</h4>
+      <p>180 instruction-tuned examples across 20 topics &times; 3 levels &times; 3 types</p>
+    </div>
+  </div>
+</section>
+
+<!-- Architecture -->
+<section id="architecture">
+  <div class="section-label reveal">Architecture</div>
+  <h2 class="section-title reveal">Multi-agent system design</h2>
+  <p class="section-desc reveal">Three specialized AI agents orchestrated via a LangGraph state machine.</p>
+
+  <div class="arch-container reveal">
+    <h3>Figure 1: High-level architecture</h3>
+    <svg class="arch-svg" width="100%" viewBox="0 0 700 420">
+      <defs>
+        <marker id="arrowhead" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M2 1L8 5L2 9" fill="none" stroke="#30363D" stroke-width="1.5" stroke-linecap="round"/>
+        </marker>
+        <marker id="arrowhead-accent" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M2 1L8 5L2 9" fill="none" stroke="#FF6B35" stroke-width="1.5" stroke-linecap="round"/>
+        </marker>
+      </defs>
+      <!-- User -->
+      <rect x="225" y="20" width="250" height="44" rx="22" fill="#1C2129" stroke="#30363D" stroke-width="1"/>
+      <text x="350" y="46" text-anchor="middle" class="label">Streamlit UI (7 pages)</text>
+      <!-- Arrow -->
+      <line x1="350" y1="64" x2="350" y2="100" class="arrow"/>
+      <!-- Orchestrator -->
+      <rect x="150" y="100" width="400" height="44" rx="10" fill="#2D1B4E" stroke="#534AB7" stroke-width="1"/>
+      <text x="350" y="126" text-anchor="middle" class="label">LangGraph orchestrator</text>
+      <!-- Arrows to agents -->
+      <line x1="220" y1="144" x2="130" y2="195" class="arrow"/>
+      <line x1="350" y1="144" x2="350" y2="195" class="arrow"/>
+      <line x1="480" y1="144" x2="570" y2="195" class="arrow"/>
+      <!-- Agent 1 -->
+      <rect x="40" y="195" width="180" height="56" rx="10" fill="#0B2E25" stroke="#0F6E56" stroke-width="1"/>
+      <text x="130" y="218" text-anchor="middle" class="label">Agent 1</text>
+      <text x="130" y="238" text-anchor="middle" class="sublabel">Curriculum architect</text>
+      <!-- Agent 2 -->
+      <rect x="260" y="195" width="180" height="56" rx="10" fill="#0B2E25" stroke="#0F6E56" stroke-width="1"/>
+      <text x="350" y="218" text-anchor="middle" class="label">Agent 2</text>
+      <text x="350" y="238" text-anchor="middle" class="sublabel">Content generator</text>
+      <!-- Agent 3 -->
+      <rect x="480" y="195" width="180" height="56" rx="10" fill="#0B2E25" stroke="#0F6E56" stroke-width="1"/>
+      <text x="570" y="218" text-anchor="middle" class="label">Agent 3</text>
+      <text x="570" y="238" text-anchor="middle" class="sublabel">Adaptive assessor</text>
+      <!-- Arrow to RAG -->
+      <line x1="570" y1="251" x2="570" y2="290" class="arrow-accent"/>
+      <!-- RAG -->
+      <rect x="470" y="290" width="200" height="50" rx="10" fill="#2A1510" stroke="#993C1D" stroke-width="1"/>
+      <text x="570" y="312" text-anchor="middle" class="label">RAG pipeline</text>
+      <text x="570" y="328" text-anchor="middle" class="sublabel">Hybrid + reranker</text>
+      <!-- Arrows to storage -->
+      <line x1="130" y1="251" x2="130" y2="380" class="arrow"/>
+      <line x1="350" y1="251" x2="350" y2="380" class="arrow"/>
+      <line x1="570" y1="340" x2="570" y2="380" class="arrow"/>
+      <!-- Storage -->
+      <rect x="40" y="380" width="620" height="40" rx="10" fill="#1C2129" stroke="#30363D" stroke-width="1"/>
+      <text x="350" y="404" text-anchor="middle" class="label">ChromaDB &middot; SQLite &middot; JSON files &middot; RAG corpus (30 docs)</text>
+    </svg>
+  </div>
+
+  <div class="arch-container reveal">
+    <h3>Figure 2: RAG pipeline &amp; fine-tuning detail</h3>
+    <svg class="arch-svg" width="100%" viewBox="0 0 700 460">
+      <defs>
+        <marker id="ah2" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M2 1L8 5L2 9" fill="none" stroke="#30363D" stroke-width="1.5" stroke-linecap="round"/>
+        </marker>
+      </defs>
+      <!-- Title: RAG -->
+      <text x="350" y="24" text-anchor="middle" fill="#FF6B35" font-size="12" font-weight="600" font-family="JetBrains Mono, monospace" letter-spacing="0.1em">RAG RETRIEVAL FLOW</text>
+      <!-- Query -->
+      <rect x="200" y="40" width="300" height="40" rx="10" fill="#1C2129" stroke="#30363D"/>
+      <text x="350" y="64" text-anchor="middle" class="label">Quiz answer submitted</text>
+      <line x1="350" y1="80" x2="350" y2="105" stroke="#30363D" stroke-width="1.5" fill="none" marker-end="url(#ah2)"/>
+      <!-- Dense + BM25 -->
+      <rect x="80" y="105" width="180" height="40" rx="10" fill="#2A1510" stroke="#993C1D"/>
+      <text x="170" y="129" text-anchor="middle" class="label">Dense search (BGE)</text>
+      <rect x="440" y="105" width="180" height="40" rx="10" fill="#2A1510" stroke="#993C1D"/>
+      <text x="530" y="129" text-anchor="middle" class="label">BM25 keyword search</text>
+      <!-- Merge arrows -->
+      <line x1="170" y1="145" x2="350" y2="175" stroke="#30363D" stroke-width="1.5" fill="none" marker-end="url(#ah2)"/>
+      <line x1="530" y1="145" x2="350" y2="175" stroke="#30363D" stroke-width="1.5" fill="none" marker-end="url(#ah2)"/>
+      <!-- RRF -->
+      <rect x="180" y="175" width="340" height="40" rx="10" fill="#2D1B4E" stroke="#534AB7"/>
+      <text x="350" y="199" text-anchor="middle" class="label">Reciprocal rank fusion (k=60)</text>
+      <line x1="350" y1="215" x2="350" y2="240" stroke="#30363D" stroke-width="1.5" fill="none" marker-end="url(#ah2)"/>
+      <!-- Reranker -->
+      <rect x="180" y="240" width="340" height="40" rx="10" fill="#2D1B4E" stroke="#534AB7"/>
+      <text x="350" y="264" text-anchor="middle" class="label">BGE cross-encoder reranker &rarr; top 3</text>
+      <line x1="350" y1="280" x2="350" y2="305" stroke="#FF6B35" stroke-width="1.5" fill="none" marker-end="url(#arrowhead-accent)"/>
+      <!-- Assessor -->
+      <rect x="180" y="305" width="340" height="40" rx="10" fill="#0B2E25" stroke="#0F6E56"/>
+      <text x="350" y="329" text-anchor="middle" class="label">Adaptive assessor scores with cited docs</text>
+      <!-- Divider -->
+      <line x1="60" y1="370" x2="640" y2="370" stroke="#30363D" stroke-width="0.5" stroke-dasharray="4 4"/>
+      <!-- Fine-tuning title -->
+      <text x="350" y="395" text-anchor="middle" fill="#FF6B35" font-size="12" font-weight="600" font-family="JetBrains Mono, monospace" letter-spacing="0.1em">FINE-TUNING PIPELINE</text>
+      <!-- Pipeline -->
+      <rect x="40" y="410" width="130" height="40" rx="10" fill="#1C2129" stroke="#30363D"/>
+      <text x="105" y="434" text-anchor="middle" class="label">144 examples</text>
+      <line x1="170" y1="430" x2="210" y2="430" stroke="#30363D" stroke-width="1.5" fill="none" marker-end="url(#ah2)"/>
+      <rect x="210" y="410" width="130" height="40" rx="10" fill="#2A1510" stroke="#993C1D"/>
+      <text x="275" y="434" text-anchor="middle" class="label">LoRA (r=16)</text>
+      <line x1="340" y1="430" x2="380" y2="430" stroke="#30363D" stroke-width="1.5" fill="none" marker-end="url(#ah2)"/>
+      <rect x="380" y="410" width="130" height="40" rx="10" fill="#2D1B4E" stroke="#534AB7"/>
+      <text x="445" y="434" text-anchor="middle" class="label">29.5 MB adapter</text>
+      <line x1="510" y1="430" x2="550" y2="430" stroke="#FF6B35" stroke-width="1.5" fill="none" marker-end="url(#arrowhead-accent)"/>
+      <rect x="550" y="410" width="110" height="40" rx="10" fill="#0B2E25" stroke="#0F6E56"/>
+      <text x="605" y="434" text-anchor="middle" class="label">Agent 2</text>
+    </svg>
+  </div>
+</section>
+
+<!-- Interactive Demo -->
+<section id="demo">
+  <div class="section-label reveal">Try it</div>
+  <h2 class="section-title reveal">Interactive curriculum generator</h2>
+  <p class="section-desc reveal">This simulates what Agent 1 (Curriculum Architect) produces. In the live app, GPT-4o-mini generates this in real time.</p>
+
+  <div class="demo-container reveal">
+    <div class="demo-header">
+      <div class="demo-dot" style="background:#FF5F57"></div>
+      <div class="demo-dot" style="background:#FEBC2E"></div>
+      <div class="demo-dot" style="background:#28C840"></div>
+      <span style="color:var(--text-3);font-size:0.8rem;margin-left:0.5rem;">LearnForge — curriculum preview</span>
+    </div>
+    <div class="demo-body">
+      <div class="demo-input-row">
+        <input class="demo-input" id="topicInput" type="text" placeholder="Enter a topic (e.g., Machine Learning, Kubernetes)" value="Machine Learning">
+        <select class="demo-select" id="levelSelect">
+          <option value="beginner">Beginner</option>
+          <option value="intermediate" selected>Intermediate</option>
+          <option value="advanced">Advanced</option>
+        </select>
+        <button class="btn-primary" onclick="generateCurriculum()">Generate &#x2192;</button>
+      </div>
+      <div class="demo-output" id="demoOutput">
+        <p style="color:var(--text-3);text-align:center;padding:3rem 0;">Click "Generate" to see the curriculum</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Flashcard Demo -->
+<section id="flashcards-demo">
+  <div class="section-label reveal">Try it</div>
+  <h2 class="section-title reveal">Flashcard flipper</h2>
+  <p class="section-desc reveal">These are actual flashcards from the demo data. Flip, rate your confidence, and watch mastery build — just like in the real app.</p>
+
+  <div class="demo-container reveal" style="max-width:700px;margin:0 auto;">
+    <div class="demo-header">
+      <div class="demo-dot" style="background:#FF5F57"></div>
+      <div class="demo-dot" style="background:#FEBC2E"></div>
+      <div class="demo-dot" style="background:#28C840"></div>
+      <span style="color:var(--text-3);font-size:0.8rem;margin-left:0.5rem;">LearnForge — flashcards</span>
+    </div>
+    <div class="demo-body">
+      <!-- Stats row -->
+      <div style="display:flex;gap:1.5rem;margin-bottom:1.5rem;flex-wrap:wrap;" id="fc-stats">
+        <div style="text-align:center;flex:1;min-width:70px;">
+          <div style="font-size:0.75rem;color:var(--text-3);">Card</div>
+          <div style="font-size:1.4rem;font-weight:700;" id="fc-counter">1/8</div>
+        </div>
+        <div style="text-align:center;flex:1;min-width:70px;">
+          <div style="font-size:0.75rem;color:var(--text-3);">Correct</div>
+          <div style="font-size:1.4rem;font-weight:700;color:var(--teal);" id="fc-correct">0</div>
+        </div>
+        <div style="text-align:center;flex:1;min-width:70px;">
+          <div style="font-size:0.75rem;color:var(--text-3);">Incorrect</div>
+          <div style="font-size:1.4rem;font-weight:700;color:var(--coral);" id="fc-incorrect">0</div>
+        </div>
+        <div style="text-align:center;flex:1;min-width:70px;">
+          <div style="font-size:0.75rem;color:var(--text-3);">Mastery</div>
+          <div style="font-size:1.4rem;font-weight:700;color:var(--flame-2);" id="fc-mastery">0%</div>
+        </div>
+      </div>
+
+      <!-- Progress bar -->
+      <div style="height:4px;background:var(--border);border-radius:2px;margin-bottom:2rem;overflow:hidden;">
+        <div id="fc-progress" style="height:100%;background:linear-gradient(90deg,var(--flame-1),var(--flame-2));border-radius:2px;width:12.5%;transition:width 0.4s ease;"></div>
+      </div>
+
+      <!-- Card -->
+      <div id="fc-card" onclick="flipCard()" style="cursor:pointer;perspective:1000px;margin-bottom:1.5rem;">
+        <div id="fc-card-inner" style="position:relative;min-height:220px;transition:transform 0.6s;transform-style:preserve-3d;">
+          <!-- Front -->
+          <div id="fc-front" style="position:absolute;top:0;left:0;right:0;min-height:220px;backface-visibility:hidden;
+            background:linear-gradient(135deg,#2D1B4E,#1a1145);border:1px solid #534AB7;border-radius:16px;
+            display:flex;flex-direction:column;align-items:center;justify-content:center;padding:2rem;text-align:center;">
+            <div style="font-size:0.75rem;color:rgba(167,139,250,0.6);margin-bottom:0.8rem;font-family:'JetBrains Mono',monospace;" id="fc-diff-badge">EASY</div>
+            <div style="font-size:1.2rem;font-weight:500;line-height:1.5;color:#E8E0FF;" id="fc-question">Loading...</div>
+            <div style="font-size:0.8rem;color:rgba(167,139,250,0.4);margin-top:1.5rem;">Click to flip</div>
+          </div>
+          <!-- Back -->
+          <div id="fc-back" style="position:absolute;top:0;left:0;right:0;min-height:220px;backface-visibility:hidden;
+            transform:rotateY(180deg);
+            background:linear-gradient(135deg,#0B2E25,#062218);border:1px solid #0F6E56;border-radius:16px;
+            display:flex;flex-direction:column;align-items:center;justify-content:center;padding:2rem;text-align:center;">
+            <div style="font-size:0.75rem;color:rgba(63,185,160,0.6);margin-bottom:0.8rem;">ANSWER</div>
+            <div style="font-size:1.1rem;font-weight:500;line-height:1.6;color:#B5F0E0;" id="fc-answer">Loading...</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Hint -->
+      <div id="fc-hint-box" style="display:none;background:rgba(247,201,72,0.08);border:1px solid rgba(247,201,72,0.2);border-radius:10px;padding:0.8rem 1rem;margin-bottom:1rem;font-size:0.85rem;color:var(--flame-2);">
+        <span style="font-weight:600;">Hint:</span> <span id="fc-hint-text"></span>
+      </div>
+
+      <!-- Buttons: before flip -->
+      <div id="fc-pre-buttons" style="display:flex;gap:0.8rem;">
+        <button onclick="showHint()" style="flex:1;padding:0.7rem;border-radius:10px;border:1px solid var(--border);background:var(--surface);color:var(--flame-2);font-family:'DM Sans',sans-serif;font-size:0.9rem;cursor:pointer;font-weight:500;transition:all 0.2s;">
+          &#x1f4a1; Show hint
+        </button>
+        <button onclick="flipCard()" style="flex:1;padding:0.7rem;border-radius:10px;border:none;background:linear-gradient(90deg,var(--flame-1),var(--flame-2));color:#fff;font-family:'DM Sans',sans-serif;font-size:0.9rem;cursor:pointer;font-weight:600;transition:all 0.2s;">
+          &#x1f504; Flip card
+        </button>
+      </div>
+
+      <!-- Buttons: after flip -->
+      <div id="fc-post-buttons" style="display:none;gap:0.8rem;">
+        <button onclick="rateCard(false)" style="flex:1;padding:0.7rem;border-radius:10px;border:1px solid rgba(247,129,102,0.3);background:rgba(247,129,102,0.08);color:var(--coral);font-family:'DM Sans',sans-serif;font-size:0.9rem;cursor:pointer;font-weight:500;transition:all 0.2s;">
+          &#x274c; Didn't know
+        </button>
+        <button onclick="rateCard(true)" style="flex:1;padding:0.7rem;border-radius:10px;border:1px solid rgba(247,201,72,0.3);background:rgba(247,201,72,0.08);color:var(--flame-2);font-family:'DM Sans',sans-serif;font-size:0.9rem;cursor:pointer;font-weight:500;transition:all 0.2s;">
+          &#x1f914; Kinda knew
+        </button>
+        <button onclick="rateCard(true)" style="flex:1;padding:0.7rem;border-radius:10px;border:1px solid rgba(63,185,160,0.3);background:rgba(63,185,160,0.08);color:var(--teal);font-family:'DM Sans',sans-serif;font-size:0.9rem;cursor:pointer;font-weight:500;transition:all 0.2s;">
+          &#x2705; Knew it!
+        </button>
+      </div>
+
+      <!-- Restart -->
+      <div id="fc-complete" style="display:none;text-align:center;padding:2rem 0;">
+        <div style="font-size:2rem;margin-bottom:0.5rem;">&#x1f389;</div>
+        <h3 style="margin-bottom:0.5rem;">Deck complete!</h3>
+        <p style="color:var(--text-2);margin-bottom:1rem;" id="fc-final-score">You got 0 out of 8 correct</p>
+        <button onclick="restartDeck()" class="btn-primary">Restart deck</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Documentation -->
+<section id="docs">
+  <div class="section-label reveal">Documentation</div>
+  <h2 class="section-title reveal">Project documentation</h2>
+  <p class="section-desc reveal">Comprehensive technical documentation covering every aspect of the system.</p>
+
+  <div class="stack-grid">
+    <div class="stack-item reveal">
+      <div class="dot" style="background:var(--accent)"></div>
+      <div><strong>Final Report (PDF)</strong><br><span>Architecture, implementation, metrics, ethics</span></div>
+    </div>
+    <div class="stack-item reveal">
+      <div class="dot" style="background:var(--teal)"></div>
+      <div><strong>SETUP_GUIDE.md</strong><br><span>Step-by-step install, all 3 modes, troubleshooting</span></div>
+    </div>
+    <div class="stack-item reveal">
+      <div class="dot" style="background:var(--purple)"></div>
+      <div><strong>docs/architecture.md</strong><br><span>Agent design, orchestrator routing, data flow</span></div>
+    </div>
+    <div class="stack-item reveal">
+      <div class="dot" style="background:var(--blue)"></div>
+      <div><strong>docs/prompt_engineering.md</strong><br><span>All 5 prompts with design rationale</span></div>
+    </div>
+    <div class="stack-item reveal">
+      <div class="dot" style="background:var(--coral)"></div>
+      <div><strong>docs/rag_design.md</strong><br><span>Corpus, chunking, hybrid retrieval, reranking</span></div>
+    </div>
+    <div class="stack-item reveal">
+      <div class="dot" style="background:var(--flame-2)"></div>
+      <div><strong>docs/finetuning_report.md</strong><br><span>Training data, config, Colab results</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- Tech Stack -->
+<section>
+  <div class="section-label reveal">Built with</div>
+  <h2 class="section-title reveal">Technology stack</h2>
+  <div class="stack-grid" style="margin-top:2rem;">
+    <div class="stack-item reveal"><div class="dot" style="background:var(--teal)"></div><div><strong>LangGraph</strong><br><span>State machine orchestration</span></div></div>
+    <div class="stack-item reveal"><div class="dot" style="background:var(--accent)"></div><div><strong>GPT-4o-mini</strong><br><span>Agent LLM backbone</span></div></div>
+    <div class="stack-item reveal"><div class="dot" style="background:var(--purple)"></div><div><strong>Qwen2.5-3B + LoRA</strong><br><span>Fine-tuned content generator</span></div></div>
+    <div class="stack-item reveal"><div class="dot" style="background:var(--blue)"></div><div><strong>ChromaDB + BM25</strong><br><span>Hybrid vector + keyword retrieval</span></div></div>
+    <div class="stack-item reveal"><div class="dot" style="background:var(--coral)"></div><div><strong>BGE embeddings + reranker</strong><br><span>Semantic search + cross-encoder</span></div></div>
+    <div class="stack-item reveal"><div class="dot" style="background:var(--flame-2)"></div><div><strong>Streamlit + Plotly</strong><br><span>7-page UI with interactive charts</span></div></div>
+    <div class="stack-item reveal"><div class="dot" style="background:var(--teal)"></div><div><strong>DALL-E 3 + OpenAI TTS</strong><br><span>Multimodal image + audio</span></div></div>
+    <div class="stack-item reveal"><div class="dot" style="background:var(--accent)"></div><div><strong>SQLite + JSON</strong><br><span>Progress tracking + content cache</span></div></div>
+  </div>
+</section>
+
+<!-- Author -->
+<section>
+  <div class="author-card reveal">
+    <div class="author-avatar">TB</div>
+    <div class="author-info">
+      <h3>Tanya Bansal</h3>
+      <div class="nuid">NUID: 002020208</div>
+      <p>MS in Information Systems, Northeastern University<br>INFO 7375: Prompt Engineering and Generative AI &middot; Spring 2026<br>Professor Nick Bear Brown</p>
+      <div class="author-links">
+        <a href="https://github.com/tanyabansal98" target="_blank">GitHub</a>
+        <a href="https://linkedin.com/in/tanyabansal28" target="_blank">LinkedIn</a>
+        <a href="https://tanyabansal98.github.io" target="_blank">Portfolio</a>
+        <a href="mailto:bansal.t@northeastern.edu">Email</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p>LearnForge &middot; INFO 7375 Final Project &middot; Northeastern University &middot; Spring 2026</p>
+</footer>
+
+<script>
+// Scroll reveal
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.1 });
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+// Demo curriculum data
+const curricula = {
+  "machine learning": {
+    beginner: [
+      { title: "What is machine learning?", desc: "Types of ML, real-world examples, the ML pipeline", bloom: "Remember", time: "25 min", diff: "Easy", emoji: "&#x1f9e0;" },
+      { title: "Data and features", desc: "Datasets, feature types, data cleaning basics", bloom: "Understand", time: "30 min", diff: "Easy", emoji: "&#x1f4ca;" },
+      { title: "Your first model", desc: "Linear regression, training, and prediction", bloom: "Apply", time: "35 min", diff: "Medium", emoji: "&#x1f527;" },
+      { title: "Evaluating models", desc: "Accuracy, overfitting, train/test splits", bloom: "Analyze", time: "30 min", diff: "Medium", emoji: "&#x1f50d;" },
+      { title: "Next steps in ML", desc: "Learning paths, tools, and resources", bloom: "Evaluate", time: "20 min", diff: "Easy", emoji: "&#x2696;&#xfe0f;" },
+    ],
+    intermediate: [
+      { title: "Foundations of ML", desc: "Supervised, unsupervised, reinforcement learning", bloom: "Remember", time: "25 min", diff: "Easy", emoji: "&#x1f9e0;" },
+      { title: "Supervised learning algorithms", desc: "Linear/logistic regression, trees, SVMs", bloom: "Understand", time: "35 min", diff: "Medium", emoji: "&#x1f4a1;" },
+      { title: "Neural networks & deep learning", desc: "Perceptrons, backprop, CNNs, RNNs", bloom: "Apply", time: "40 min", diff: "Medium", emoji: "&#x1f527;" },
+      { title: "Model evaluation & tuning", desc: "Cross-validation, bias-variance, hyperparameters", bloom: "Analyze", time: "35 min", diff: "Hard", emoji: "&#x1f50d;" },
+      { title: "ML in production", desc: "Feature engineering, MLOps, ethics", bloom: "Evaluate", time: "30 min", diff: "Hard", emoji: "&#x2696;&#xfe0f;" },
+    ],
+    advanced: [
+      { title: "Statistical learning theory", desc: "VC dimension, PAC learning, generalization bounds", bloom: "Remember", time: "40 min", diff: "Hard", emoji: "&#x1f9e0;" },
+      { title: "Advanced optimization", desc: "Adam, learning rate schedules, second-order methods", bloom: "Understand", time: "35 min", diff: "Hard", emoji: "&#x1f4a1;" },
+      { title: "Transformers & attention", desc: "Self-attention, multi-head, positional encoding", bloom: "Apply", time: "45 min", diff: "Hard", emoji: "&#x1f527;" },
+      { title: "Generative models", desc: "VAEs, GANs, diffusion models, LLMs", bloom: "Analyze", time: "40 min", diff: "Hard", emoji: "&#x1f50d;" },
+      { title: "Research frontiers", desc: "RLHF, constitutional AI, multimodal models", bloom: "Create", time: "35 min", diff: "Hard", emoji: "&#x1f3a8;" },
+    ],
+  },
+};
+
+function generateCurriculum() {
+  const topic = document.getElementById('topicInput').value.toLowerCase().trim();
+  const level = document.getElementById('levelSelect').value;
+  const output = document.getElementById('demoOutput');
+
+  let modules;
+  if (curricula[topic] && curricula[topic][level]) {
+    modules = curricula[topic][level];
+  } else {
+    // Generate a generic curriculum for any topic
+    const t = document.getElementById('topicInput').value;
+    const blooms = ["Remember", "Understand", "Apply", "Analyze", "Evaluate"];
+    const emojis = ["&#x1f9e0;", "&#x1f4a1;", "&#x1f527;", "&#x1f50d;", "&#x2696;&#xfe0f;"];
+    const diffs = level === "beginner" ? ["Easy","Easy","Medium","Medium","Easy"] :
+                  level === "advanced" ? ["Hard","Hard","Hard","Hard","Hard"] :
+                  ["Easy","Medium","Medium","Hard","Hard"];
+    modules = [
+      { title: `Introduction to ${t}`, desc: `Core concepts and terminology`, bloom: blooms[0], time: "25 min", diff: diffs[0], emoji: emojis[0] },
+      { title: `${t} fundamentals`, desc: `Key principles and frameworks`, bloom: blooms[1], time: "30 min", diff: diffs[1], emoji: emojis[1] },
+      { title: `Hands-on ${t}`, desc: `Practical exercises and examples`, bloom: blooms[2], time: "35 min", diff: diffs[2], emoji: emojis[2] },
+      { title: `Advanced ${t} concepts`, desc: `Deep analysis and patterns`, bloom: blooms[3], time: "35 min", diff: diffs[3], emoji: emojis[3] },
+      { title: `${t} mastery & review`, desc: `Evaluation, synthesis, next steps`, bloom: blooms[4], time: "25 min", diff: diffs[4], emoji: emojis[4] },
+    ];
+  }
+
+  let html = '';
+  modules.forEach((m, i) => {
+    html += `<div class="module" style="animation: fadeUp 0.4s ease ${i * 0.1}s both;">
+      <div class="module-bloom" style="background:rgba(255,107,53,0.1)">${m.emoji}</div>
+      <div class="module-info">
+        <h4>Module ${i+1}: ${m.title}</h4>
+        <p>${m.desc}</p>
+        <div class="module-tags">
+          <span class="tag tag-bloom">${m.bloom}</span>
+          <span class="tag tag-time">${m.time}</span>
+          <span class="tag tag-diff">${m.diff}</span>
+        </div>
+      </div>
+    </div>`;
+  });
+  output.innerHTML = html;
+}
+// Flashcard data (from demo_data/flashcards.json)
+const fcCards = [
+  { front: "What are the three main types of Machine Learning?", back: "Supervised Learning (labeled data), Unsupervised Learning (no labels), Reinforcement Learning (rewards/penalties)", hint: "Think about what kind of feedback the model gets during training", diff: "easy" },
+  { front: "What is the difference between classification and regression?", back: "Classification predicts discrete categories (spam/not spam). Regression predicts continuous values (house price).", hint: "One is about labels, the other about numbers", diff: "easy" },
+  { front: "Name the 8 stages of the ML pipeline", back: "1. Data Collection \u2192 2. Preprocessing \u2192 3. Feature Engineering \u2192 4. Model Selection \u2192 5. Training \u2192 6. Evaluation \u2192 7. Deployment \u2192 8. Monitoring", hint: "Starts with data, ends with keeping watch", diff: "medium" },
+  { front: "What is overfitting?", back: "When a model memorizes the training data (including noise) and performs poorly on new, unseen data. High training accuracy but low test accuracy.", hint: "The model is too good at the training set", diff: "easy" },
+  { front: "When should you use unsupervised learning?", back: "When you don't have labeled data and want to discover hidden patterns \u2014 customer segmentation, anomaly detection, dimensionality reduction.", hint: "No teacher, no labels, just finding structure", diff: "medium" },
+  { front: "What is the bias-variance tradeoff?", back: "High bias = underfitting (too simple). High variance = overfitting (too complex). The goal is to find the sweet spot that minimizes total error.", hint: "Simple vs complex models", diff: "hard" },
+  { front: "What is gradient descent?", back: "An optimization algorithm that iteratively adjusts model parameters in the direction that reduces the loss function. Learning rate controls step size.", hint: "Going downhill to find the lowest point", diff: "medium" },
+  { front: "What is cross-validation?", back: "A technique that splits data into k folds, trains on k-1 folds and tests on the remaining fold, rotating k times. Gives a more reliable estimate of model performance.", hint: "k-fold \u2014 everyone gets a turn being the test set", diff: "medium" },
+];
+
+let fcIdx = 0, fcFlipped = false, fcCorrectCount = 0, fcIncorrectCount = 0;
+
+function renderCard() {
+  const card = fcCards[fcIdx];
+  document.getElementById('fc-question').textContent = card.front;
+  document.getElementById('fc-answer').textContent = card.back;
+  document.getElementById('fc-hint-text').textContent = card.hint;
+  document.getElementById('fc-diff-badge').textContent = card.diff.toUpperCase();
+  document.getElementById('fc-counter').textContent = `${fcIdx + 1}/${fcCards.length}`;
+  document.getElementById('fc-progress').style.width = `${((fcIdx + 1) / fcCards.length) * 100}%`;
+  document.getElementById('fc-hint-box').style.display = 'none';
+  document.getElementById('fc-card-inner').style.transform = '';
+  document.getElementById('fc-pre-buttons').style.display = 'flex';
+  document.getElementById('fc-post-buttons').style.display = 'none';
+  document.getElementById('fc-complete').style.display = 'none';
+  document.getElementById('fc-card').style.display = 'block';
+  fcFlipped = false;
+  updateFcStats();
+}
+
+function flipCard() {
+  if (fcFlipped) return;
+  fcFlipped = true;
+  document.getElementById('fc-card-inner').style.transform = 'rotateY(180deg)';
+  document.getElementById('fc-pre-buttons').style.display = 'none';
+  document.getElementById('fc-post-buttons').style.display = 'flex';
+}
+
+function showHint() {
+  document.getElementById('fc-hint-box').style.display = 'block';
+}
+
+function rateCard(correct) {
+  if (correct) fcCorrectCount++; else fcIncorrectCount++;
+  fcIdx++;
+  if (fcIdx >= fcCards.length) {
+    showComplete();
+  } else {
+    renderCard();
+  }
+}
+
+function showComplete() {
+  document.getElementById('fc-card').style.display = 'none';
+  document.getElementById('fc-pre-buttons').style.display = 'none';
+  document.getElementById('fc-post-buttons').style.display = 'none';
+  document.getElementById('fc-complete').style.display = 'block';
+  document.getElementById('fc-final-score').textContent = `You got ${fcCorrectCount} out of ${fcCards.length} correct (${Math.round(fcCorrectCount/fcCards.length*100)}% mastery)`;
+  document.getElementById('fc-progress').style.width = '100%';
+  updateFcStats();
+}
+
+function restartDeck() {
+  fcIdx = 0; fcCorrectCount = 0; fcIncorrectCount = 0; fcFlipped = false;
+  renderCard();
+}
+
+function updateFcStats() {
+  document.getElementById('fc-correct').textContent = fcCorrectCount;
+  document.getElementById('fc-incorrect').textContent = fcIncorrectCount;
+  const total = fcCorrectCount + fcIncorrectCount;
+  document.getElementById('fc-mastery').textContent = total > 0 ? Math.round(fcCorrectCount / total * 100) + '%' : '0%';
+}
+
+renderCard();
+</script>
+
+</body>
+</html>
