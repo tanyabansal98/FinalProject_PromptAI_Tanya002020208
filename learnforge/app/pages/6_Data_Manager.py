@@ -136,8 +136,17 @@ with tab3:
             path = GENERATED_DIR / selected
             if path.exists():
                 import json
-                content = json.loads(path.read_text())
-                st.json(content)
+                raw = path.read_text(encoding="utf-8").strip()
+                if not raw:
+                    st.warning(f"⚠️ `{selected}` is empty.")
+                else:
+                    try:
+                        content = json.loads(raw)
+                        st.json(content)
+                    except json.JSONDecodeError:
+                        st.text(raw[:3000])
+                        if len(raw) > 3000:
+                            st.caption(f"... (truncated, {len(raw)} chars total)")
 
 # ════════════════════════════════════════════════════════════════
 # TAB 4: Export

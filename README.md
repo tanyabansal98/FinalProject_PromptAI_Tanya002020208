@@ -45,40 +45,14 @@ The system uses **three AI agents** orchestrated via a **LangGraph state machine
 
 ## 🏗️ Architecture
 
-```
-┌─────────────────────────────────────────────────────────────┐
-│                    Streamlit UI (7 pages)                     │
-│  Home │ Curriculum │ Lesson │ Quiz │ Flashcards │ Dashboard │ Data Manager │
-└────────────────────────┬────────────────────────────────────┘
-                         │
-                         ▼
-┌─────────────────────────────────────────────────────────────┐
-│              LangGraph Orchestrator (State Machine)           │
-│  Routes: CURRICULUM │ LESSON │ QUIZ │ FLASHCARD │ EVALUATE │ RECOMMEND  │
-└───────┬──────────────────┬──────────────────┬───────────────┘
-        │                  │                  │
-        ▼                  ▼                  ▼
-┌──────────────┐  ┌──────────────────┐  ┌──────────────────┐
-│   Agent 1     │  │     Agent 2       │  │     Agent 3       │
-│  Curriculum   │  │    Content        │  │    Adaptive       │
-│  Architect    │  │    Generator      │  │    Assessor       │
-│  (GPT-4o-mini)│  │  (Fine-tuned /   │  │  (GPT-4o-mini    │
-│               │  │   API fallback)   │  │   + RAG context)  │
-└──────┬───────┘  └────────┬─────────┘  └────────┬─────────┘
-       │                   │                      │
-       │                   │                      ▼
-       │                   │            ┌──────────────────┐
-       │                   │            │   RAG Pipeline     │
-       │                   │            │  ChromaDB + BM25   │
-       │                   │            │  Hybrid + Reranker │
-       │                   │            └────────┬─────────┘
-       │                   │                     │
-       ▼                   ▼                     ▼
-┌─────────────────────────────────────────────────────────────┐
-│                      Data Storage Layer                       │
-│  ChromaDB (vectors) │ SQLite (scores) │ JSON (content) │ Corpus (30 .md) │
-└─────────────────────────────────────────────────────────────┘
-```
+### High-Level Architecture
+
+![High-Level Architecture Diagram](./HighLevelArchDiagram.webp)
+
+### Detailed Architecture
+
+![Detailed Architecture Diagram](./DetailedArchDiagram.webp)
+
 
 ### Three Agents
 

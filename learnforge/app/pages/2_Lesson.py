@@ -75,39 +75,29 @@ st.divider()
 # ── Multimodal: Text-to-Speech ──
 from src.content.multimodal import generate_audio, get_tts_voices
 
-with st.expander("🔊 Listen to this lesson (Text-to-Speech)"):
+with st.expander("🔊 Listen to this lesson (Text-to-Speech)", expanded=False):
     tts_col1, tts_col2 = st.columns([3, 1])
     with tts_col2:
         voice = st.selectbox("Voice", get_tts_voices(), index=0)
     with tts_col1:
         if st.button("🔊 Generate Audio", use_container_width=True):
-            # Combine lesson text
             full_text = lesson.get("title", "") + ". "
             for section in lesson.get("sections", []):
                 full_text += section.get("heading", "") + ". " + section.get("content", "") + " "
             full_text += lesson.get("summary", "")
 
-            with st.spinner("Generating audio..."):
+            with st.spinner("Generating audio... This may take a few seconds."):
                 audio_result = generate_audio(full_text[:4000], voice)
 
             if audio_result["type"] == "audio_bytes":
                 st.audio(audio_result["data"], format="audio/mp3")
-                st.success("✅ Audio generated! You can also find it in `data/generated/`")
-            else:
-                # Browser TTS fallback
-                tts_text = audio_result["data"][:500].replace("'", "\\'").replace("\n", " ")
-                st.markdown(f"""
-                <button onclick="
-                    const utterance = new SpeechSynthesisUtterance('{tts_text}');
-                    utterance.rate = 0.9;
-                    window.speechSynthesis.speak(utterance);
-                " style="padding:10px 20px; background:#667eea; color:white; border:none; border-radius:8px; cursor:pointer; font-size:16px;">
-                    ▶️ Play with Browser TTS
-                </button>
-                <p style="color:#888; font-size:12px; margin-top:5px;">
-                    💡 Demo/Ollama mode uses browser-native speech. API mode uses OpenAI's HD voices.
-                </p>
-                """, unsafe_allow_html=True)
+                st.success("✅ Audio generated with OpenAI TTS (API mode)")
+            elif audio_result["type"] == "gtts_bytes":
+                st.audio(audio_result["data"], format="audio/mp3")
+                st.success("✅ Audio generated with Google TTS (demo mode)")
+            elif audio_result["type"] == "error":
+                st.error("Audio generation failed. Install gTTS: `pip install gTTS`")
+            st.caption("💡 API mode uses OpenAI HD voices. Demo/Ollama mode uses Google TTS. Audio is also saved to `data/generated/`.")
 
 st.divider()
 

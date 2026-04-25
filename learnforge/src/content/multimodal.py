@@ -104,15 +104,15 @@ def _svg_placeholder(topic: str, module_title: str) -> dict:
 def generate_audio(text: str, voice: str = "alloy") -> dict:
     """
     Convert text to speech.
-    Returns: {type: "audio_bytes"|"browser_tts", data: bytes|str, format: "mp3"|"browser"}
+    Returns: {type: "audio_bytes"|"gtts_bytes", data: bytes, format: "mp3"}
+    Always returns playable audio bytes — never browser JS fallback.
     """
     mode = get_mode()
 
     if mode == "api" and OPENAI_API_KEY:
         return _openai_tts(text, voice)
     else:
-        # Return text for browser-native TTS (handled in Streamlit frontend)
-        return {"type": "browser_tts", "data": text, "format": "browser"}
+        return _gtts_fallback(text)
 
 
 def _openai_tts(text: str, voice: str = "alloy") -> dict:
@@ -121,7 +121,6 @@ def _openai_tts(text: str, voice: str = "alloy") -> dict:
         from openai import OpenAI
         client = OpenAI(api_key=OPENAI_API_KEY)
 
-        # Truncate to ~4000 chars (API limit is 4096)
         text = text[:4000]
 
         response = client.audio.speech.create(
@@ -132,7 +131,6 @@ def _openai_tts(text: str, voice: str = "alloy") -> dict:
 
         audio_bytes = response.content
 
-        # Also save to file
         GENERATED_DIR.mkdir(parents=True, exist_ok=True)
         from datetime import datetime
         ts = datetime.now().strftime("%Y%m%d_%H%M%S")
@@ -143,7 +141,36 @@ def _openai_tts(text: str, voice: str = "alloy") -> dict:
         return {"type": "audio_bytes", "data": audio_bytes, "format": "mp3", "path": str(audio_path)}
     except Exception as e:
         logger.warning(f"OpenAI TTS failed: {e}")
-        return {"type": "browser_tts", "data": text, "format": "browser"}
+        return _gtts_fallback(text)
+
+
+def _gtts_fallback(text: str) -> dict:
+    """Generate audio using gTTS (free, no API key, works offline-ish). Returns MP3 bytes."""
+    try:
+        from gtts import gTTS
+        import io
+
+        text = text[:5000]
+        tts = gTTS(text=text, lang='en', slow=False)
+        mp3_buffer = io.BytesIO()
+        tts.write_to_fp(mp3_buffer)
+        mp3_bytes = mp3_buffer.getvalue()
+
+        # Also save to file
+        GENERATED_DIR.mkdir(parents=True, exist_ok=True)
+        from datetime import datetime
+        ts = datetime.now().strftime("%Y%m%d_%H%M%S")
+        audio_path = GENERATED_DIR / f"audio_{ts}.mp3"
+        with open(audio_path, "wb") as f:
+            f.write(mp3_bytes)
+
+        return {"type": "gtts_bytes", "data": mp3_bytes, "format": "mp3", "path": str(audio_path)}
+    except ImportError:
+        logger.warning("gTTS not installed. Run: pip install gTTS")
+        return {"type": "error", "data": None, "format": None}
+    except Exception as e:
+        logger.warning(f"gTTS failed: {e}")
+        return {"type": "error", "data": None, "format": None}
 
 
 def get_tts_voices():
